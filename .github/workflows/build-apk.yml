@@ -37,20 +37,29 @@ jobs:
         flutter-version: '3.16.0'
         channel: 'stable'
         
-    - name: Build APK with Flet
+    - name: Accept Android licenses and setup SDK
       run: |
-        export FLET_FORCE_WEB_BROWSER_DOWNLOAD=true
-        flet pack app.py --project MeetingRecorder --org com.meetingrecorder || \
-        flet build apk app.py --project MeetingRecorder --org com.meetingrecorder || \
-        echo "Build completed"
+        yes | sdkmanager --licenses > /dev/null 2>&1 || true
+        sdkmanager "platforms;android-34" "build-tools;34.0.0" > /dev/null 2>&1 || true
         
-    - name: Find and list APK files
+    - name: Build APK with Flet (auto-confirm)
+      env:
+        FLET_FORCE_WEB_BROWSER_DOWNLOAD: "true"
       run: |
-        echo "=== Searching for APK files ==="
-        find . -name "*.apk" -type f 2>/dev/null
-        mkdir -p output
-        find . -name "*.apk" -type f -exec cp {} output/ \; 2>/dev/null || true
-        ls -la output/ 2>/dev/null || echo "No APK in output"
+        echo "y" | flet pack app.py --project MeetingRecorder --org com.meetingrecorder 2>&1 || \
+        echo "y" | flet build apk app.py --project MeetingRecorder --org com.meetingrecorder 2>&1 || \
+        echo "Build attempt completed"
+        
+    - name: Find and list all files
+      run: |
+        echo "=== Project structure ==="
+        find . -maxdepth 3 -type f \( -name "*.apk" -o -name "*.aab" \) 2>/dev/null
+        echo "=== Build directory ==="
+        ls -laR build/ 2>/dev/null || echo "No build dir"
+        echo "=== Dist directory ==="
+        ls -laR dist/ 2>/dev/null || echo "No dist dir"
+        echo "=== Root APK/AAB files ==="
+        ls -la *.apk *.aab 2>/dev/null || echo "None in root"
         
     - name: Get version
       id: version
@@ -58,9 +67,13 @@ jobs:
         VERSION="v$(date +'%Y%m%d-%H%M%S')"
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         
-    - name: Upload APK as Artifact
+    - name: Upload any build outputs as Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: meeting-recorder-apk-${{ steps.version.outputs.version }}
-        path: output/
+        name: meeting-recorder-build-${{ steps.version.outputs.version }}
+        path: |
+          **/*.apk
+          **/*.aab
+          build/**
+          dist/**
         if-no-files-found: warn
