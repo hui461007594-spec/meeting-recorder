@@ -53,23 +53,9 @@
             font-weight: bold;
             margin-left: 10px;
         }
-        .status-building {
-            background: #fff3cd;
-            color: #856404;
-            animation: pulse 2s infinite;
-        }
-        .status-success {
-            background: #d4edda;
-            color: #155724;
-        }
-        .status-failed {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.05); }
-        }
+        .status-building { background: #fff3cd; color: #856404; animation: pulse 2s infinite; }
+        .status-success { background: #d4edda; color: #155724; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         .link-btn {
             display: block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -84,27 +70,11 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        .link-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-        .link-btn.secondary {
-            background: #28a745;
-        }
-        .link-btn.share {
-            background: #17a2b8;
-        }
-        .info-list {
-            list-style: none;
-            padding: 0;
-        }
-        .info-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #e9ecef;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .link-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102,126,234,0.4); }
+        .link-btn.success { background: #28a745; }
+        .link-btn.info { background: #17a2b8; }
+        .info-list { list-style: none; padding: 0; }
+        .info-list li { padding: 10px 0; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; gap: 10px; }
         .info-list li:last-child { border-bottom: none; }
         .icon { font-size: 20px; }
         .step-guide {
@@ -122,25 +92,15 @@
             padding: 15px;
             margin-top: 15px;
             text-align: center;
-            position: relative;
         }
-        .copy-box code {
-            color: #667eea;
-            font-size: 13px;
-            word-break: break-all;
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-            color: #6c757d;
-            font-size: 13px;
-        }
-        .refresh-hint {
-            text-align: center;
-            margin-top: 15px;
-            color: #6c757d;
-            font-size: 13px;
+        .copy-box code { color: #667eea; font-size: 13px; word-break: break-all; }
+        .footer { text-align: center; padding: 20px; background: #f8f9fa; color: #6c757d; font-size: 13px; }
+        .highlight-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
         }
     </style>
 </head>
@@ -155,87 +115,76 @@
 
             <!-- 构建状态 -->
             <div class="section">
-                <h2>
-                    📊 构建状态
-                    <span class="status-badge status-building">⏳ 可能正在构建中</span>
-                </h2>
-
+                <h2>📊 构建状态 <span class="status-badge status-building">⏳ 查看实时状态</span></h2>
+                
                 <a href="https://github.com/hui461007594-spec/meeting-recorder/actions" target="_blank" class="link-btn">
-                    🔍 查看实时构建进度 (GitHub Actions)
+                    🔍 查看GitHub Actions构建进度
                 </a>
-
-                <div class="refresh-hint">
-                    💡 提示：点击上方链接查看最新构建状态<br>
-                    ⏱️ 预计构建时间：15-20分钟
-                </div>
-            </div>
-
-            <!-- 状态说明 -->
-            <div class="section">
-                <h2>📋 如何判断状态</h2>
-                <ul class="info-list">
-                    <li><span class="icon">⏳</span> <b>黄色圆圈旋转</b> = 正在构建中（请耐心等待）</li>
-                    <li><span class="icon">✅</span> <b>绿色勾号</b> = 构建成功！可以下载APK了</li>
-                    <li><span class="icon">❌</span> <b>红色X号</b> = 构建失败（需要修复错误）</li>
+                
+                <ul class="info-list" style="margin-top:15px;">
+                    <li><span class="icon">⏳</span> <b>黄色圆圈</b> = 正在构建（等15-20分钟）</li>
+                    <li><span class="icon">✅</span> <b>绿色勾号</b> = 成功！可以下载APK了</li>
+                    <li><span class="icon">❌</span> <b>红色X号</b> = 失败（查看错误日志）</li>
                 </ul>
             </div>
 
-            <!-- 下载APK -->
+            <!-- 下载APK - Artifacts -->
             <div class="section">
                 <h2>⬇️ 下载APK安装包</h2>
-
-                <a href="https://github.com/hui461007594-spec/meeting-recorder/releases" target="_blank" class="link-btn secondary">
-                    📥 前往Releases页面下载APK
+                
+                <div class="highlight-box">
+                    <strong>📦 从 Artifacts (构件) 下载：</strong>
+                    <p style="margin-top:8px;color:#666;">构建成功后，APK会作为构件上传，90天内可下载。</p>
+                </div>
+                
+                <a href="https://github.com/hui461007594-spec/meeting-recorder/actions" target="_blank" class="link-btn success">
+                    📥 前往Actions页面下载APK
                 </a>
-
+                
                 <div class="step-guide">
-                    <h3>📱 安装步骤：</h3>
+                    <h3>📱 下载步骤：</h3>
                     <ol>
-                        <li>等待构建完成（看到绿色✅后）</li>
-                        <li>点击上方按钮进入Releases页面</li>
-                        <li>找到最新版本（如 v20260409-xxxxx）</li>
-                        <li>滚动到底部，点击 <code>.apk</code> 文件下载</li>
-                        <li>将APK传到华为Mate60手机</li>
-                        <li>在手机设置中允许「安装未知来源应用」</li>
-                        <li>打开APK文件完成安装</li>
+                        <li>点击上方按钮进入 Actions 页面</li>
+                        <li>找到最新的构建记录（最上面的）</li>
+                        <li>点击构建名称展开详情</li>
+                        <li>在底部找到 <b>"Artifacts"</b> 区域</li>
+                        <li>点击 <code>meeting-recorder-apk-xxx</code> 下载</li>
+                        <li>解压zip文件得到 <code>.apk</code> 文件</li>
+                        <li>传到华为Mate60手机并安装</li>
                     </ol>
                 </div>
             </div>
 
-            <!-- 分享给同事 -->
+            <!-- 项目地址 -->
             <div class="section">
-                <h2>👥 分享给同事</h2>
-
-                <a href="https://github.com/hui461007594-spec/meeting-recorder/releases" target="_blank" class="link-btn share">
-                    📤 复制分享链接给同事
+                <h2>🔗 项目链接</h2>
+                
+                <a href="https://github.com/hui461007594-spec/meeting-recorder" target="_blank" class="link-btn info">
+                    📂 访问 GitHub 仓库
                 </a>
-
+                
                 <div class="copy-box">
-                    <p style="margin-bottom: 8px; color: #666;">🔗 同事专用下载链接（直接发给他们）：</p>
-                    <code>https://github.com/hui461007594-spec/meeting-recorder/releases</code>
-                    <p style="margin-top: 10px; color: #888; font-size: 12px;">
-                        💡 同事每次打开这个链接都能下载到最新版APK
-                    </p>
+                    <p style="margin-bottom:8px;color:#666;">🔗 仓库地址：</p>
+                    <code>https://github.com/hui461007594-spec/meeting-recorder</code>
                 </div>
             </div>
 
-            <!-- 后续迭代 -->
+            <!-- 更新流程 -->
             <div class="section">
                 <h2>🔄 后续更新流程</h2>
                 <ul class="info-list">
                     <li><span class="icon">1️⃣</span> 修改代码文件（app.py等）</li>
                     <li><span class="icon">2️⃣</span> 双击运行 <code>clean_and_push.bat</code></li>
-                    <li><span class="icon">3️⃣</span> 输入Token并按回车</li>
-                    <li><span class="icon">4️⃣</span> 自动弹出此页面，等待15-20分钟</li>
-                    <li><span class="icon">5️⃣</span> 从Releases页面下载新版APK</li>
+                    <li><span class="icon">3️⃣</span> 输入Token按回车</li>
+                    <li><span class="icon">4️⃣</span> 自动弹出此HTML页面</li>
+                    <li><span class="icon">5️⃣</span> 等15-20分钟后从Artifacts下载新版APK</li>
                 </ul>
             </div>
 
         </div>
 
         <div class="footer">
-            <p>Meeting Recorder v1.0.0 | Powered by GitHub Actions</p>
-            <p style="margin-top: 5px;">构建失败？请检查GitHub Actions日志或联系开发者</p>
+            <p>Meeting Recorder v1.0.0 | Powered by GitHub Actions & Flet</p>
         </div>
     </div>
 </body>
