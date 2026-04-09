@@ -42,15 +42,12 @@ jobs:
         yes | sdkmanager --licenses > /dev/null 2>&1 || true
         sdkmanager "platforms;android-34" "build-tools;34.0.0" > /dev/null 2>&1 || true
         
-    - name: Build APK with Flet (auto-confirm)
+    - name: Build APK with Flet
       env:
         FLET_FORCE_WEB_BROWSER_DOWNLOAD: "true"
       run: |
-        echo "=== Building APK from main.py ==="
-        echo "y" | flet pack \
-          --project MeetingRecorder \
-          --org com.meetingrecorder \
-          2>&1 || echo "Pack attempt completed"
+        echo "=== Building APK ==="
+        echo "y" | flet pack . 2>&1 || echo "Pack completed"
         
     - name: Find and list all files
       run: |
