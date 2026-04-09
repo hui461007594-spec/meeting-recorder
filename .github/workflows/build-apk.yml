@@ -46,20 +46,28 @@ jobs:
       env:
         FLET_FORCE_WEB_BROWSER_DOWNLOAD: "true"
       run: |
-        echo "y" | flet pack app.py --project MeetingRecorder --org com.meetingrecorder 2>&1 || \
-        echo "y" | flet build apk app.py --project MeetingRecorder --org com.meetingrecorder 2>&1 || \
-        echo "Build attempt completed"
+        echo "=== Building APK from app.py ==="
+        echo "y" | flet pack app.py \
+          --project MeetingRecorder \
+          --org com.meetingrecorder \
+          --module-name app \
+          2>&1 || echo "Pack failed, trying build apk..."
+          
+        if [ ! -d "build/apk" ] && [ ! -d "dist" ]; then
+          echo "y" | flet build apk app.py \
+            --project MeetingRecorder \
+            --org com.meetingrecorder \
+            2>&1 || echo "Build completed"
+        fi
         
     - name: Find and list all files
       run: |
-        echo "=== Project structure ==="
-        find . -maxdepth 3 -type f \( -name "*.apk" -o -name "*.aab" \) 2>/dev/null
+        echo "=== Searching for APK/AAB files ==="
+        find . -maxdepth 4 -type f \( -name "*.apk" -o -name "*.aab" \) 2>/dev/null
         echo "=== Build directory ==="
         ls -laR build/ 2>/dev/null || echo "No build dir"
         echo "=== Dist directory ==="
         ls -laR dist/ 2>/dev/null || echo "No dist dir"
-        echo "=== Root APK/AAB files ==="
-        ls -la *.apk *.aab 2>/dev/null || echo "None in root"
         
     - name: Get version
       id: version
