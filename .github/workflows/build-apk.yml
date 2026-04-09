@@ -47,7 +47,8 @@ jobs:
         FLET_FORCE_WEB_BROWSER_DOWNLOAD: "true"
       run: |
         echo "=== Building APK ==="
-        echo "y" | flet pack . 2>&1 || echo "Pack completed"
+        echo "y" | flet build apk . 2>&1 | tee build.log || echo "Build completed"
+        cat build.log
         
     - name: Find and list all files
       run: |
